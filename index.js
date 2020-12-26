@@ -5,7 +5,7 @@ const PIXEL_COLOR = "#e44d4d";
 const fakeCanvas = document.querySelector(".fake-canvas");
 const flexRows = fakeCanvas.querySelectorAll(".flex-row");
 
-const config = {
+const mapOfRows = {
   0: [],
   1: [1, 2, 3, 5, 7, 9],
   2: [1, 3, 5, 7, 9],
@@ -15,18 +15,19 @@ const config = {
   6: []
 };
 
-let walker = document.createTreeWalker(flexRows[1], NodeFilter.SHOW_ELEMENT);
-let counter = 0;
+const createWalker = (elem) => document.createTreeWalker(
+    elem,
+    NodeFilter.SHOW_ELEMENT
+  );
 
-for (let i = 0; i < flexRows.length; i++) {
-  walker = document.createTreeWalker(flexRows[i], NodeFilter.SHOW_ELEMENT);
+flexRows.forEach((divElem, i) => {
+  const rowsWalker = createWalker(divElem)
+  let itemInRow = 0;
 
-  while (walker.nextNode()) {
-    if (config[i].includes(counter)) {
-      walker.currentNode.classList.add("pixel-dot");
+  while (rowsWalker.nextNode()) {
+    if (mapOfRows[i].includes(itemInRow)) {
+      rowsWalker.currentNode.classList.add("pixel-dot");
     }
-
-    counter++;
+    itemInRow++;
   }
-  counter = 0;
-}
+});
